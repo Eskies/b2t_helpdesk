@@ -1,0 +1,401 @@
+{% import (
+	"github.com/valyala/fasthttp" 
+	"b2t_helpdesk/injector"
+	"github.com/tidwall/gjson"
+)%}
+
+{% code
+type KeluhanPage struct {
+	CTX *fasthttp.RequestCtx
+	Dinjector *injector.Injector
+}
+%}
+
+
+{% func (p *KeluhanPage) Title() %}
+	Daftar Keluhan
+{% endfunc %}
+
+
+{% func (p *KeluhanPage) Body() %}
+
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Filter</h6>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-4">
+					<div class="form-group">
+						<label>Jenis</label>
+						<select id="jenisfilter" class="form-control autopulldata">
+							<option value="-1">Semua</option>
+							{% code
+								var optionval []string
+								p.Dinjector.Config.Get("keyboardlist").Get("jenisticket").ForEach(func(key gjson.Result, value gjson.Result) bool {
+									optionval = append(optionval, value.Get("jenis").String())
+									return true
+								})
+							%}
+							{% for _, value := range optionval %}
+								<option value="{%s value %}">{%s value %}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="col-4">
+					<div class="form-group">
+						<label>Kelompok</label>
+						<select id="kelompokfilter" class="form-control autopulldata">
+							<option value="-1">Semua</option>
+							{% code
+								var optionval2 []string
+								p.Dinjector.Config.Get("keyboardlist").Get("kelompok").ForEach(func(key gjson.Result, value gjson.Result) bool {
+									optionval2 = append(optionval2, value.String())
+									return true
+								})
+							%}
+							{% for _, value := range optionval2 %}
+								<option value="{%s value %}">{%s value %}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="col-2">
+					<div class="form-group">
+						<label>Status</label>
+						<select id="statusfilter" class="form-control autopulldata">
+							<option value="-1">Semua</option>
+							<option value="0">Terbuka</option>
+							<option value="1">Tertutup</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-2">
+					<div class="form-group">
+						<label>Openchat</label>
+						<select id="openfilter" class="form-control autopulldata">
+							<option value="-1">Semua</option>
+							<option value="0">Close</option>
+							<option value="1">Open</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Data Keluhan
+				<a href="#" class="ms-5 btn btn-success btn-sm" id="autosync">
+					<i class="fas fa-sync"></i> Auto Refresh
+				</a>
+				<a href="#" class="ms-3 btn btn-success btn-sm" onclick="intDataTable()">
+					<i class="fas fa-sync"></i> Refresh Now!
+				</a>
+			</h6>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered" id="dataKeluhan" width="100%" cellspacing="0">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>No</th>
+							<th>Nama</th>
+							<th>Kelompok</th>
+							<th>Jenis</th>
+							<th>Status</th>
+							<th>Openchat</th>
+							<th>Tim</th>
+						</tr>
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+{% endfunc %}
+
+{% func (p *KeluhanPage) Modal() %}
+	<div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Keluhan - <span id="idkeluhan"></span></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+					<div class="row">
+						<div class="col-10">
+							<table class="table table-bordered" width="100%" cellspacing="0">
+								<tr>
+									<td style="width: 1%; white-space: nowrap;">Nama:</td>
+									<td id="tbNama"></td>
+									<td style="width: 1%; white-space: nowrap;">Kelompok:</td>
+									<td id="tbKelompok"></td>
+								</tr>
+								<tr>
+									<td style="width: 1%; white-space: nowrap;">No Reg.:</td>
+									<td id="tbNoReg"></td>
+									<td style="width: 1%; white-space: nowrap;">Jenis:</td>
+									<td id="tbJenis"></td>
+								</tr>
+							</table>
+						</div>
+						<div class="col-2">
+							<button id="tutupKeluhan" class="btn btn-block" type="button">Tutup Keluhan</button>
+							<button id="mulaiChat" class="btn btn-success btn-block mt-3" type="button">Open Chat</button>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<p class="text-muted">Jika sesi chat berstatus close (tombol masih berwarna hijau), maka anda tidak dapat membaca balasan pesan (sesi hanya 1 arah).<br />Silahkan buka sesi openchat jika ingin membuka sesi 2 arah</p>
+							<div class="px-4 py-5 chat-box bg-white border border-primary" id="chatbox"></div>
+							<!-- Typing area -->
+							<div id="typingArea" class="bg-light">
+								<div class="input-group">
+								<textarea id="textpesan" type="text" placeholder="Ketik pesan anda" aria-describedby="btnkirimchat" class="form-control rounded-0 border-0 py-4 bg-light" row="4"></textarea>
+								<div class="input-group-append">
+									<button id="btnkirimchat" type="button" class="btn btn-link"> <i class="fa fa-paper-plane"></i></button>
+								</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+                
+            </div>
+        </div>
+    </div>
+{% endfunc %}
+
+{% func (p *KeluhanPage) Script() %}
+<script>
+	var dataKeluhan_table;
+	var intervaldatatable;
+	$(document).ready(function(){
+		dataKeluhan_table = $('#dataKeluhan').DataTable({
+			"processing": true,
+			"serverSide": true,
+			"lengthMenu": [ 10, 25, 50, 75, 100 ],
+			"ajax": {
+						"url" : "/api/datakeluhantable",
+						"type": "POST",
+						"data": function ( d ) {
+								return $.extend( {}, d, {
+									"jenisfilter": $("#jenisfilter").val(),
+									"kelompokfilter": $("#kelompokfilter").val(),
+									"statusfilter": $("#statusfilter").val(),
+									"openfilter": $("#openfilter").val(),
+								} );
+						},
+					},
+			"columns" : [
+				{
+					"searchable":      false,
+					"data":           "id",
+					"className":      "dt-body-center nowrap",
+					"render": function( data, type, row, meta ) {
+						return '<button class="btn btn-success" type="button" onclick="openTicket('+data+')">'+data+'</button>';
+					}
+				},
+				{ "data": "no" },
+				{ "data": "nama" },
+				{ "data": "kelompok" },
+				{ "data": "jenis" },
+				{ "data": "status" },
+				{ "data": "openchat" },
+				{ "data": "tim" },
+			],
+			"order": [[0, 'desc']],
+			initComplete: function(){
+				var api = this.api();
+				$('#dataKeluhan_filter input')
+					.off('.DT')
+					.on('keyup.DT', function (e) {
+						if (e.keyCode == 13) {
+							api.search(this.value).draw();
+						}
+					});
+			}
+		});
+
+		$(".autopulldata").change(function(){
+			dataKeluhan_table.ajax.reload();
+		});
+
+		$("#autosync").click(function(){
+			if ($("#autosync").hasClass("btn-success")) {
+				$("#autosync").removeClass("btn-success").addClass("btn-danger");
+				$("#autosync").find("i.fas").removeClass("fa-sync").addClass("fa-times");
+				intervaldatatable = setInterval(intDataTable,3000);
+
+			} else {
+				$("#autosync").removeClass("btn-danger").addClass("btn-success");
+				$("#autosync").find("i.fas").removeClass("fa-times").addClass("fa-sync");
+				clearInterval(intervaldatatable);
+			}
+		});
+	});
+
+	function intDataTable() {
+		dataKeluhan_table.ajax.reload(null, false);
+	}
+
+	var intervalchat;
+	var idpesanakhir;
+	var idopenticket;
+	var petugas;
+	function openTicket(id) {
+		$('#idkeluhan').html(id);
+
+		idopenticket = id;
+
+		//fetch data
+		$.get("/api/infoticket/"+id)
+		.done(function(data){
+			$('#tbNama').html(data.nama);
+			$('#tbNoReg').html(data.no);
+			$('#tbKelompok').html(data.kelompok);
+			$('#tbJenis').html(data.jenis);
+
+			if (data.status == 0) {
+				$('#tutupKeluhan').removeClass('btn-danger').addClass('btn-warning').html("Tutup Keluhan");
+				$('#mulaiChat').show();
+				$('#typingArea').show();
+			} else {
+				$('#tutupKeluhan').removeClass('btn-warning').addClass('btn-danger').html("Buka Lagi Keluhan");
+				$('#mulaiChat').hide();
+				$('#typingArea').hide();
+			}
+
+			if (data.openchat == 0) {
+				$('#mulaiChat').removeClass('btn-danger').addClass('btn-success').html("Buka Sesi Chat");
+			} else {
+				$('#mulaiChat').removeClass('btn-success').addClass('btn-danger').html("Tutup Sesi Chat");
+			}
+
+			idpesanakhir = 0;
+			reloadPesanChat();
+
+			intervalchat = setInterval(reloadPesanChat,3000);
+		})
+
+		//show modal
+		$("#ticketModal").modal('show');
+	}
+
+	function reloadPesanChat() {
+		if (idpesanakhir == 0) {
+			$('#chatbox').html('');
+		}
+
+		$.get("/api/chatticket/"+idopenticket+"/"+idpesanakhir)
+		.done(function(data){
+			$.each(data.chat, function(i,v){
+				if (v.penulis.length < 1) {
+					//customer
+					out = '<div class="media w-50 mb-3"><img src="/static/img/undraw_profile.svg" alt="user" width="50" class="rounded-circle">';
+					out += '<div class="media-body ml-3">';
+					out += '<div class="bg-light rounded py-2 px-3 mb-2">';
+					out += '<p class="text-small mb-0 text-muted">'+v.pesan+'</p>';
+					if (v.file.length > 1) {
+						out += '<img src="/photos/'+v.file+'" class="img-responsive" style="width: 100%;">';
+					}
+					out += '</div>';
+					out += '<p class="small text-muted">'+v.timestamp+'</p>';
+					out += '</div></div>';
+					$('#chatbox').append(out);
+				} else {
+					//pegawai
+					out = '<div class="media w-50 ml-auto mb-3">';
+					out += '<div class="media-body">';
+					out += '<div class="bg-primary rounded py-2 px-3 mb-2">';
+					out += '<p class="text-small mb-0 text-white">'+v.pesan+'</p>';
+					out += '</div>';
+					out += '<p class="small text-muted">'+v.timestamp+' | '+v.penulis+'</p>';
+					out += '</div></div>';
+					$('#chatbox').append(out);
+				}
+				idpesanakhir = v.id;
+			})
+		})
+	}
+
+	$(document).ready(function(){
+		$("#mulaiChat").click(function(){
+			if ($('#mulaiChat').hasClass('btn-success')) {
+				$.get("/api/openchat/"+idopenticket)
+				.done(function(data){
+					$('#mulaiChat').removeClass('btn-success').addClass('btn-danger').html("Tutup Sesi Chat");
+				})
+			} else {
+				$.get("/api/closechat/"+idopenticket)
+				.done(function(data){
+					$('#mulaiChat').removeClass('btn-danger').addClass('btn-success').html("Buka Sesi Chat");
+				})
+			}
+		});
+		$("#btnkirimchat").click(function(){
+			if ($("#textpesan").val().length < 5) {
+				alert("Pesan minimal 5 karakter");
+				return false;
+			}
+
+			datapost = {
+				"pesan" : $('#textpesan').val(),
+				"pegawai" : petugas,
+			};
+			$.post("/api/sendchat/"+idopenticket, datapost)
+			.done(function(data){
+				reloadPesanChat();
+				$('#textpesan').val('').focus();
+			})
+		});
+		$('#ticketModal').on('hidden.bs.modal', function (e) {
+			clearInterval(intervalchat);
+		})
+		$('#tutupKeluhan').click(function(){
+			if ($('#tutupKeluhan').hasClass("btn-warning")) {
+				$.get("/api/closekeluhan/"+idopenticket)
+				.done(function(data){
+					$('#tutupKeluhan').removeClass('btn-warning').addClass('btn-danger').html("Buka Keluhan");
+					$('#mulaiChat').hide();
+					$('#typingArea').hide();
+				})
+			} else {
+				$.get("/api/openkeluhan/"+idopenticket)
+				.done(function(data){
+					$('#tutupKeluhan').removeClass('btn-danger').addClass('btn-warning').html("Tutup Keluhan");
+					$('#mulaiChat').show();
+					$('#typingArea').show();
+				})
+			}
+		});
+
+		Swal.fire({
+			title: 'Mohon inputkan nama anda',
+			input: 'text',
+			inputLabel: 'Nama Anda',
+			inputPlaceholder: 'Masukan nama anda',
+			allowOutsideClick: false,
+			showCancelButton: false,
+			showCloseButton: false,
+			allowEscapeKey: false,
+		}).then((result) => {
+			if (result.value) {
+				petugas = result.value;
+			} else {
+				location.reload();
+			}
+		});
+	});
+</script>
+{% endfunc %}

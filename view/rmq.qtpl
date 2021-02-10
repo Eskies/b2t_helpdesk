@@ -1,0 +1,37 @@
+{% import (
+	"github.com/valyala/fasthttp" 
+	"b2t_helpdesk/injector"
+)%}
+
+{% code
+type RmqPage struct {
+	CTX *fasthttp.RequestCtx
+	Dinjector *injector.Injector
+}
+%}
+
+
+{% func (p *RmqPage) Title() %}
+	Message Queue Stats
+{% endfunc %}
+
+
+{% func (p *RmqPage) Body() %}
+	<div class="card shadow mb-4">
+		<div class="card-body">
+			{% code
+				stat, _ := p.Dinjector.QConn.CollectStats([]string{"outbox-b2t"})
+			%}
+			<pre>{%s stat.String() %}</pre>
+		</div>
+	</div>
+
+{% endfunc %}
+
+{% func (p *RmqPage) Modal() %}
+	
+{% endfunc %}
+
+{% func (p *RmqPage) Script() %}
+
+{% endfunc %}

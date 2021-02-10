@@ -1,0 +1,29 @@
+{% import "github.com/valyala/fasthttp" %}
+
+{% code
+type MainPage struct {
+	CTX *fasthttp.RequestCtx
+}
+%}
+
+
+{% func (p *MainPage) Title() %}
+	Beranda
+{% endfunc %}
+
+
+{% func (p *MainPage) Body() %}
+	<div>
+		Some info about you:<br/>
+		IP: <b>{%s p.CTX.RemoteIP().String() %}</b><br/>
+		User-Agent: <b>{%z p.CTX.UserAgent() %}</b><br/>
+	</div>
+{% endfunc %}
+
+{% func (p *MainPage) Modal() %}
+	
+{% endfunc %}
+
+{% func (p *MainPage) Script() %}
+	
+{% endfunc %}

@@ -1,0 +1,86 @@
+{
+    "telegram" : {
+        "botkey" : "1606248862:AAGkuNiv97330DWoP2PPdVHeqGuJ9YsVni4",
+        "channel_id" : "-1001456413512"
+    },
+    "redis" : {
+        "host" : "127.0.0.1",
+        "port" : "6379",
+        "password" : "",
+        "db" : 0
+    },
+    "database" : {
+        "host" : "127.0.0.1",
+        "port" : "3306",
+        "user" : "root",
+        "password" : "",
+        "db" : "b2t_helpdesk"
+    },
+    "rmq" : {
+        "prefetchlimit" : 1000,
+        "pollduration_sec" : 1,
+        "batch_size" : 25,
+        "batch_timeout_sec" : 1
+    },
+
+    "pesan" : {
+        "welcome": "Halo selamat datang, saat ini anda belum terdaftar pada sistem kami.\nUntuk melakukan pendaftaran, silahkan ketik /daftar. Anda tidak diperkenankan melakukan aktifitas apapun dengan bot kami sebelum terdaftar.",
+        "daftar" : {
+            "pembuka" : "Terimkasih karena memilih untuk mendaftar, ikuti tahap-tahap selanjutnya. Pastikan bahwa anda nanti menginputkan data dengan benar. Perlu diperhatikan bahwa proses ini maksimal berjalan selama 5 menit. Jika melebihi maka anda harus mengulang dari awal (ketik /daftar).",
+            "noregistrasi" : "Silahkan ketik NIM anda (Pastikan bahwa NIM yang anda masukan sudah benar):",
+            "nama" : "Silahkan ketik Nama anda:",
+            "kelompok" : "Silahkan pilih sesuai dengan nomor Program Studi anda:",
+            "penutup" : "Terima kasih, anda telah kami daftarkan. Silahkan ketik /cmd untuk melihat apa yang bisa anda lakukan. Perlu diperhatikan, untuk berinteraksi anda perlu menginputkan perintah/command terlebih dahulu.",
+            "gagal" : "Mohon maaf, registrasi anda gagal. Silahkan ulangi kembali dengan kirim /daftar"
+        },
+        "cmd": "Saat ini terdapat beberapa perintah/command yang dapat dilakukan yaitu:\n/cmd : Melihat daftar perintah\n/bantuan: Menghubungi tim support untuk mendapatkan bantuan\n/batal: Untuk membatalkan seluruh proses command yang sedang berjalan.",
+        "batal": "Seluruh proses command yang sedang berjalan sudah di batalkan.",
+        "default": "Halo, silahkan kirimkan perintah/command terlebih dahulu sebelum berinteraksi. Untuk melihat perintah yang tersedia, silahkan ketik /cmd",
+        "bantuan" : {
+            "pembuka" : "Perintah/Command bantuan diaktifkan. (Ketik /batal untuk membatalkan). Silahkan pilih jenis bantuan yang anda perlukan:",
+            "konfirmasi" : "Berdasarkan pesan yang disampaikan, apakah masih memerlukan bantuan lainnya?",
+            "sebelummodeinput" : "Silahkan ketik bantuan yang anda perlukan secara ringkas padat dan jelas untuk membantu kami memahami kebutuhan anda. Mohon hanya mengirim satu chat/pesan saja ke kami dan tidak mengirim lebih dari satu chat/pesan. Mohon untuk tidak melampirkan gambar atau file. Ketik /batal jika ingin membatalkan",
+            "sebelummodegambar" : "Silahkan cantumkan 1 gambar pendukung permintaan bantuan anda, atau ketik /selesai jika tidak ingin mencantumkan gambar",
+            "penutup" : "Terima kasih, permintaan bantuan anda akan kami teruskan ke tim support. Sebagai catatan bahwa anda tidak dapat meminta bantuan kembali hingga bantuan anda sebelumnya sudah dalam status ditutup.",
+            "selesai" : "Perintah/Command /bantuan selesai. Terima kasih :)",
+            "gagal" : "Keluhan anda gagal kami catat, mohon untuk menginputkan ulang",
+            "ongoing" : "Saat ini anda memiliki bantuan yang belum diselesaikan, mohon menunggu jawaban bantuan tersebut sebelum mengajukan bantuan kembali",
+            "close" : "Ajuan bantuan anda sudah ditutup. Silahkan ajukan lagi bantuan, jika permasalahan anda belum selesai.",
+            "open" : "Ajuan bantuan anda dibuka kembali. Anda tidak dapat mengajukan bantuan selama bantuan masih dalam status terbuka."
+        },
+        "openchat" : {
+            "open" : "Halo, saat ini tim support kami telah membuka sesi chat dengan anda. Sebentar lagi anda akan dihubungi oleh tim support kami. Selama sesi chat berlangsung, pesan anda akan langsung diteruskan ke tim support personal kami",
+            "close" : "Terima kasih, saat ini tim support kami telah menutup sesi chat dengan anda. Pesan anda selanjutnya akan ditangani oleh Robot AI kami"
+        }
+
+    },
+    "keyboardlist" : {
+        "kelompok" : {
+            "001":"Prodi Sistem Komputer",
+            "002":"Prodi Manajemen Informatika",
+            "003":"Prodi Sistem Informasi",
+            "004":"Prodi Teknologi Informasi",
+            "005":"Prodi Bisnis Digital"
+        },
+        "jenisticket" : {
+            "01" : {
+                "jenis" : "Tidak Mendapatkan Jadwal Perwalian",
+                "hint" : "Jadwal perwalian akan didapatkan ketika anda telah menyelesaikan seluruh syarat administrasi dan persyaratan lainnya (seperti sertifikasi dan TOEFL LPBA)",
+                "done" : "Jadwal anda telah diterbitkan, silahkan cek kembali pada sistem",
+                "autoinput" : false
+            },
+            "02" : {
+                "jenis" : "Tidak Dapat Mengambil Kelas / Matakuliah",
+                "hint" : "Kelas yang tidak dapat diambil kemungkinan besar telah habis kuotanya atau memang tidak dibuka pada semester ini. Silahkan pilih kelas lainnya",
+                "done" : "",
+                "autoinput" : false
+            },
+            "99" : {
+                "jenis" : "Lainnya",
+                "hint" : "Silahkan tuliskan bantuan yang diperlukan.",
+                "done" : "",
+                "autoinput" : true
+            }
+        }
+    }
+}
