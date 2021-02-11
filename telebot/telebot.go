@@ -52,6 +52,8 @@ func prosesPesanMasuk(msg *tgbotapi.Message, di *injector.Injector) {
 					di.Enqueue(msg)
 				case "bantuan":
 					cmdBantuan(msg, di, 0)
+				case "unreg":
+					deleteRegistrasi(msg, di)
 				default:
 					msg := tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("pesan").Get("default").String())
 					di.Enqueue(msg)

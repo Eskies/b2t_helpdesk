@@ -42,6 +42,15 @@ func initRoute(r *router.Router, di *injector.Injector) {
 		ctx.SetContentType("text/html; charset=utf-8")
 	})
 
+	r.GET("/jeniskeluhan", func(ctx *fasthttp.RequestCtx) {
+		p := &view.JenisKeluhan{
+			CTX:       ctx,
+			Dinjector: di,
+		}
+		view.WritePageTemplate(ctx, p)
+		ctx.SetContentType("text/html; charset=utf-8")
+	})
+
 	//API
 	r.POST("/api/datakeluhantable", func(ctx *fasthttp.RequestCtx) {
 		dataTableKeluhan(ctx, di)
@@ -72,5 +81,10 @@ func initRoute(r *router.Router, di *injector.Injector) {
 	r.GET("/api/closekeluhan/{id}", func(ctx *fasthttp.RequestCtx) {
 		closekeluhan(ctx, di)
 	})
-
+	r.POST("/jeniskeluhan/update", func(ctx *fasthttp.RequestCtx) {
+		jenisupdate(ctx, di)
+	})
+	r.GET("/jeniskeluhan/delete/{id}", func(ctx *fasthttp.RequestCtx) {
+		jenisdelete(ctx, di)
+	})
 }

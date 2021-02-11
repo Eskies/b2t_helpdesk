@@ -42,5 +42,11 @@ func rmqCleaner(di *Injector) {
 			log.Printf("RMQ Cleaner: failed to clean: %s\n", err)
 			continue
 		}
+
+		_, err = di.OutQ.ReturnRejected(100)
+		if err != nil {
+			log.Printf("RMQ Cleaner: return rejected failed: %s\n", err)
+			continue
+		}
 	}
 }

@@ -19,7 +19,7 @@ import (
 
 func (di *Injector) IsRegistered(userid int) bool {
 	var jml int64
-	err := di.DB.QueryRow("SELECT COUNT(*) FROM users WHERE id = ?", userid).Scan(&jml)
+	err := di.DB.QueryRow("SELECT COUNT(*) FROM users WHERE idtelegram = ? AND deleted_at IS NULL", userid).Scan(&jml)
 	if err != nil {
 		log.Printf("Error isRegistered: %s\n", err.Error())
 		return false
@@ -65,7 +65,7 @@ func (di *Injector) DelRedisCmd(userid int) bool {
 }
 
 func (di *Injector) TambahRegistrasi(userid int, noregis string, nama string, kelompok string) error {
-	_, err := di.DB.Exec("INSERT INTO users (id, noregistrasi, nama, kelompok) VALUES (?,?,?,?)", userid, noregis, nama, kelompok)
+	_, err := di.DB.Exec("INSERT INTO users (idtelegram, noregistrasi, nama, kelompok) VALUES (?,?,?,?)", userid, noregis, nama, kelompok)
 	if err != nil {
 		return err
 	} else {
@@ -76,7 +76,7 @@ func (di *Injector) TambahRegistrasi(userid int, noregis string, nama string, ke
 func (di *Injector) AdaBantuan(userid int) bool {
 
 	var cnt int
-	err := di.DB.QueryRow("SELECT COUNT(*) FROM tickets WHERE user_id = ? AND close = 0", userid).Scan(&cnt)
+	err := di.DB.QueryRow("SELECT COUNT(*) FROM tickets INNER JOIN users ON users.id = tickets.user_id WHERE users.idtelegram = ? AND tickets.close = 0", userid).Scan(&cnt)
 	if err != nil || cnt > 0 {
 		return true
 	} else {
@@ -87,7 +87,7 @@ func (di *Injector) AdaBantuan(userid int) bool {
 func (di *Injector) IsOpenChat(userid int) bool {
 
 	var cnt int
-	err := di.DB.QueryRow("SELECT COUNT(*) FROM users WHERE id = ? AND openchat = 1", userid).Scan(&cnt)
+	err := di.DB.QueryRow("SELECT COUNT(*) FROM users WHERE idtelegram = ? AND openchat = 1", userid).Scan(&cnt)
 	if err != nil || cnt > 0 {
 		return true
 	} else {
@@ -101,7 +101,7 @@ func (di *Injector) NewTicketBantuan(userid int, jenis string, pesan string, lin
 	sqli := sqlbuilder.NewInsertBuilder()
 	sqli.InsertInto("tickets")
 	sqli.Cols("user_id", "jenis")
-	sqli.Values(userid, jenis)
+	sqli.Values(di.IdTelegramToID(userid), jenis)
 	ia, ib := sqli.Build()
 
 	if _, err := dbconn.Exec(ia, ib...); err != nil {
@@ -111,7 +111,7 @@ func (di *Injector) NewTicketBantuan(userid int, jenis string, pesan string, lin
 	}
 
 	var lastticketid int
-	if err := dbconn.QueryRow("SELECT MAX(id) FROM tickets WHERE user_id = ?", userid).Scan(&lastticketid); err != nil {
+	if err := dbconn.QueryRow("SELECT MAX(id) FROM tickets WHERE user_id = ?", di.IdTelegramToID(userid)).Scan(&lastticketid); err != nil {
 		dbconn.Rollback()
 		log.Printf("Get Last Ticket: %s\n", err.Error())
 		return false
@@ -212,5 +212,26 @@ func (di *Injector) Enqueue(msg tgbotapi.MessageConfig) {
 	err = di.OutQ.PublishBytes(taskBytes)
 	if err != nil {
 		log.Println("Error Publis Queue")
+	}
+}
+
+func (di *Injector) IsNoRegUsed(usernoreg string) bool {
+
+	var cnt int
+	err := di.DB.QueryRow("SELECT COUNT(*) FROM users WHERE noregistrasi = ? AND deleted_at IS NULL", usernoreg).Scan(&cnt)
+	if err != nil || cnt > 0 {
+		return true
+	} else {
+		return false
+	}
+}
+
+func (di *Injector) IdTelegramToID(userid int) int {
+	var iduser int
+	err := di.DB.QueryRow("SELECT id FROM users WHERE idtelegram = ? AND deleted_at IS NULL", userid).Scan(&iduser)
+	if err != nil {
+		return 0
+	} else {
+		return iduser
 	}
 }

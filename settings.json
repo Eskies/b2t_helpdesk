@@ -33,7 +33,7 @@
             "penutup" : "Terima kasih, anda telah kami daftarkan. Silahkan ketik /cmd untuk melihat apa yang bisa anda lakukan. Perlu diperhatikan, untuk berinteraksi anda perlu menginputkan perintah/command terlebih dahulu.",
             "gagal" : "Mohon maaf, registrasi anda gagal. Silahkan ulangi kembali dengan kirim /daftar"
         },
-        "cmd": "Saat ini terdapat beberapa perintah/command yang dapat dilakukan yaitu:\n/cmd : Melihat daftar perintah\n/bantuan: Menghubungi tim support untuk mendapatkan bantuan\n/batal: Untuk membatalkan seluruh proses command yang sedang berjalan.",
+        "cmd": "Saat ini terdapat beberapa perintah/command yang dapat dilakukan yaitu:\n/cmd : Melihat daftar perintah\n/bantuan : Menghubungi tim support untuk mendapatkan bantuan\n/batal : Untuk membatalkan seluruh proses command yang sedang berjalan.\n/unreg : menghapus daftar registrasi anda.",
         "batal": "Seluruh proses command yang sedang berjalan sudah di batalkan.",
         "default": "Halo, silahkan kirimkan perintah/command terlebih dahulu sebelum berinteraksi. Untuk melihat perintah yang tersedia, silahkan ketik /cmd",
         "bantuan" : {
@@ -63,22 +63,9 @@
             "005":"Prodi Bisnis Digital"
         },
         "jenisticket" : {
-            "01" : {
-                "jenis" : "Tidak Mendapatkan Jadwal Perwalian",
-                "hint" : "Jadwal perwalian akan didapatkan ketika anda telah menyelesaikan seluruh syarat administrasi dan persyaratan lainnya (seperti sertifikasi dan TOEFL LPBA)",
-                "done" : "Jadwal anda telah diterbitkan, silahkan cek kembali pada sistem",
-                "autoinput" : false
-            },
-            "02" : {
-                "jenis" : "Tidak Dapat Mengambil Kelas / Matakuliah",
-                "hint" : "Kelas yang tidak dapat diambil kemungkinan besar telah habis kuotanya atau memang tidak dibuka pada semester ini. Silahkan pilih kelas lainnya",
-                "done" : "",
-                "autoinput" : false
-            },
-            "99" : {
+            "??" : {
                 "jenis" : "Lainnya",
                 "hint" : "Silahkan tuliskan bantuan yang diperlukan.",
-                "done" : "",
                 "autoinput" : true
             }
         }

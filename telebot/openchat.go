@@ -14,7 +14,7 @@ func OpenChat(msg *tgbotapi.Message, di *injector.Injector) {
 	dbconn, _ := di.DB.Begin()
 
 	var lastticketid int
-	if err := dbconn.QueryRow("SELECT MAX(id) FROM tickets WHERE user_id = ?", msg.From.ID).Scan(&lastticketid); err != nil {
+	if err := dbconn.QueryRow("SELECT MAX(id) FROM tickets WHERE user_id = ?", di.IdTelegramToID(msg.From.ID)).Scan(&lastticketid); err != nil {
 		dbconn.Rollback()
 		log.Printf("Get Last Ticket: %s\n", err.Error())
 		return

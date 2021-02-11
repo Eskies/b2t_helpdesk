@@ -2,6 +2,7 @@ package browser
 
 import (
 	"b2t_helpdesk/injector"
+	"database/sql"
 	"strconv"
 	"strings"
 	"time"
@@ -304,7 +305,7 @@ func openchat(ctx *fasthttp.RequestCtx, di *injector.Injector) {
 	}
 
 	var userid int64
-	err = di.DB.QueryRow("SELECT user_id FROM tickets WHERE id = ?", idticket).Scan(&userid)
+	err = di.DB.QueryRow("SELECT users.idtelegram FROM tickets INNER JOIN users ON users.id = tickets.user_id WHERE tickets.id = ?", idticket).Scan(&userid)
 	if err != nil {
 		_, _ = ctx.WriteString("Internal Error, Contact Admin!")
 		ctx.SetUserValue("errormsg", err.Error())
@@ -330,7 +331,7 @@ func closechat(ctx *fasthttp.RequestCtx, di *injector.Injector) {
 	}
 
 	var userid int64
-	err = di.DB.QueryRow("SELECT user_id FROM tickets WHERE id = ?", idticket).Scan(&userid)
+	err = di.DB.QueryRow("SELECT users.idtelegram FROM tickets INNER JOIN users ON users.id = tickets.user_id WHERE tickets.id = ?", idticket).Scan(&userid)
 	if err != nil {
 		_, _ = ctx.WriteString("Internal Error, Contact Admin!")
 		ctx.SetUserValue("errormsg", err.Error())
@@ -349,13 +350,19 @@ func sendchat(ctx *fasthttp.RequestCtx, di *injector.Injector) {
 	pegawai := string(ctx.FormValue("pegawai"))
 
 	var userid int64
-	err := di.DB.QueryRow("SELECT user_id FROM tickets WHERE id = ?", idticket).Scan(&userid)
+	err := di.DB.QueryRow("SELECT users.idtelegram FROM users INNER JOIN tickets ON tickets.user_id = users.id WHERE tickets.id = ? AND users.deleted_at IS NULL;", idticket).Scan(&userid)
 	if err != nil {
-		_, _ = ctx.WriteString("Internal Error, Contact Admin!")
-		ctx.SetUserValue("errormsg", err.Error())
-		ctx.SetStatusCode(fasthttp.StatusInternalServerError)
-		ctx.SetConnectionClose()
-		return
+		if err == sql.ErrNoRows {
+			_, _ = ctx.WriteString("Pengguna sudah tidak terdaftar!")
+			ctx.SetStatusCode(fasthttp.StatusBadRequest)
+			return
+		} else {
+			_, _ = ctx.WriteString("Internal Error, Contact Admin!")
+			ctx.SetUserValue("errormsg", err.Error())
+			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+			ctx.SetConnectionClose()
+			return
+		}
 	}
 
 	sqli := sqlbuilder.NewInsertBuilder()
@@ -392,7 +399,7 @@ func openkeluhan(ctx *fasthttp.RequestCtx, di *injector.Injector) {
 	}
 
 	var userid int64
-	err = di.DB.QueryRow("SELECT user_id FROM tickets WHERE id = ?", idticket).Scan(&userid)
+	err = di.DB.QueryRow("SELECT users.idtelegram FROM users INNER JOIN tickets ON tickets.user_id = users.id WHERE tickets.id = ? AND users.deleted_at IS NULL;", idticket).Scan(&userid)
 	if err != nil {
 		_, _ = ctx.WriteString("Internal Error, Contact Admin!")
 		ctx.SetUserValue("errormsg", err.Error())
@@ -417,7 +424,7 @@ func closekeluhan(ctx *fasthttp.RequestCtx, di *injector.Injector) {
 	}
 
 	var userid int64
-	err = di.DB.QueryRow("SELECT user_id FROM tickets WHERE id = ?", idticket).Scan(&userid)
+	err = di.DB.QueryRow("SELECT users.idtelegram FROM users INNER JOIN tickets ON tickets.user_id = users.id WHERE tickets.id = ? AND users.deleted_at IS NULL;", idticket).Scan(&userid)
 	if err != nil {
 		_, _ = ctx.WriteString("Internal Error, Contact Admin!")
 		ctx.SetUserValue("errormsg", err.Error())

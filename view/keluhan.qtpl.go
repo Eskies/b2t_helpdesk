@@ -84,31 +84,37 @@ func (p *KeluhanPage) StreamBody(qw422016 *qt422016.Writer) {
 							`)
 //line keluhan.qtpl:34
 	var optionval []string
+	results, _ := p.Dinjector.DB.Query("SELECT jenis FROM jenisticket ORDER BY id ASC")
+	for results.Next() {
+		var jenis string
+		results.Scan(&jenis)
+		optionval = append(optionval, jenis)
+	}
 	p.Dinjector.Config.Get("keyboardlist").Get("jenisticket").ForEach(func(key gjson.Result, value gjson.Result) bool {
 		optionval = append(optionval, value.Get("jenis").String())
 		return true
 	})
 
-//line keluhan.qtpl:39
+//line keluhan.qtpl:45
 	qw422016.N().S(`
 							`)
-//line keluhan.qtpl:40
+//line keluhan.qtpl:46
 	for _, value := range optionval {
-//line keluhan.qtpl:40
+//line keluhan.qtpl:46
 		qw422016.N().S(`
 								<option value="`)
-//line keluhan.qtpl:41
+//line keluhan.qtpl:47
 		qw422016.E().S(value)
-//line keluhan.qtpl:41
+//line keluhan.qtpl:47
 		qw422016.N().S(`">`)
-//line keluhan.qtpl:41
+//line keluhan.qtpl:47
 		qw422016.E().S(value)
-//line keluhan.qtpl:41
+//line keluhan.qtpl:47
 		qw422016.N().S(`</option>
 							`)
-//line keluhan.qtpl:42
+//line keluhan.qtpl:48
 	}
-//line keluhan.qtpl:42
+//line keluhan.qtpl:48
 	qw422016.N().S(`
 						</select>
 					</div>
@@ -119,33 +125,33 @@ func (p *KeluhanPage) StreamBody(qw422016 *qt422016.Writer) {
 						<select id="kelompokfilter" class="form-control autopulldata">
 							<option value="-1">Semua</option>
 							`)
-//line keluhan.qtpl:52
+//line keluhan.qtpl:58
 	var optionval2 []string
 	p.Dinjector.Config.Get("keyboardlist").Get("kelompok").ForEach(func(key gjson.Result, value gjson.Result) bool {
 		optionval2 = append(optionval2, value.String())
 		return true
 	})
 
-//line keluhan.qtpl:57
+//line keluhan.qtpl:63
 	qw422016.N().S(`
 							`)
-//line keluhan.qtpl:58
+//line keluhan.qtpl:64
 	for _, value := range optionval2 {
-//line keluhan.qtpl:58
+//line keluhan.qtpl:64
 		qw422016.N().S(`
 								<option value="`)
-//line keluhan.qtpl:59
+//line keluhan.qtpl:65
 		qw422016.E().S(value)
-//line keluhan.qtpl:59
+//line keluhan.qtpl:65
 		qw422016.N().S(`">`)
-//line keluhan.qtpl:59
+//line keluhan.qtpl:65
 		qw422016.E().S(value)
-//line keluhan.qtpl:59
+//line keluhan.qtpl:65
 		qw422016.N().S(`</option>
 							`)
-//line keluhan.qtpl:60
+//line keluhan.qtpl:66
 	}
-//line keluhan.qtpl:60
+//line keluhan.qtpl:66
 	qw422016.N().S(`
 						</select>
 					</div>
@@ -209,38 +215,38 @@ func (p *KeluhanPage) StreamBody(qw422016 *qt422016.Writer) {
 	</div>
 
 `)
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 }
 
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 func (p *KeluhanPage) WriteBody(qq422016 qtio422016.Writer) {
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 	p.StreamBody(qw422016)
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 	qt422016.ReleaseWriter(qw422016)
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 }
 
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 func (p *KeluhanPage) Body() string {
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 	qb422016 := qt422016.AcquireByteBuffer()
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 	p.WriteBody(qb422016)
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 	qs422016 := string(qb422016.B)
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 	qt422016.ReleaseByteBuffer(qb422016)
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 	return qs422016
-//line keluhan.qtpl:122
+//line keluhan.qtpl:128
 }
 
-//line keluhan.qtpl:124
+//line keluhan.qtpl:130
 func (p *KeluhanPage) StreamModal(qw422016 *qt422016.Writer) {
-//line keluhan.qtpl:124
+//line keluhan.qtpl:130
 	qw422016.N().S(`
 	<div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -295,38 +301,38 @@ func (p *KeluhanPage) StreamModal(qw422016 *qt422016.Writer) {
         </div>
     </div>
 `)
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 }
 
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 func (p *KeluhanPage) WriteModal(qq422016 qtio422016.Writer) {
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 	p.StreamModal(qw422016)
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 	qt422016.ReleaseWriter(qw422016)
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 }
 
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 func (p *KeluhanPage) Modal() string {
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 	qb422016 := qt422016.AcquireByteBuffer()
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 	p.WriteModal(qb422016)
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 	qs422016 := string(qb422016.B)
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 	qt422016.ReleaseByteBuffer(qb422016)
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 	return qs422016
-//line keluhan.qtpl:177
+//line keluhan.qtpl:183
 }
 
-//line keluhan.qtpl:179
+//line keluhan.qtpl:185
 func (p *KeluhanPage) StreamScript(qw422016 *qt422016.Writer) {
-//line keluhan.qtpl:179
+//line keluhan.qtpl:185
 	qw422016.N().S(`
 <script>
 	var dataKeluhan_table;
@@ -500,6 +506,7 @@ func (p *KeluhanPage) StreamScript(qw422016 *qt422016.Writer) {
 				return false;
 			}
 
+			$("#btnkirimchat").hide();
 			datapost = {
 				"pesan" : $('#textpesan').val(),
 				"pegawai" : petugas,
@@ -509,6 +516,10 @@ func (p *KeluhanPage) StreamScript(qw422016 *qt422016.Writer) {
 				reloadPesanChat();
 				$('#textpesan').val('').focus();
 			})
+
+			setTimeout(function() {
+				$("#btnkirimchat").show();
+			}, 2000);
 		});
 		$('#ticketModal').on('hidden.bs.modal', function (e) {
 			clearInterval(intervalchat);
@@ -550,31 +561,31 @@ func (p *KeluhanPage) StreamScript(qw422016 *qt422016.Writer) {
 	});
 </script>
 `)
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 }
 
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 func (p *KeluhanPage) WriteScript(qq422016 qtio422016.Writer) {
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 	p.StreamScript(qw422016)
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 	qt422016.ReleaseWriter(qw422016)
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 }
 
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 func (p *KeluhanPage) Script() string {
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 	qb422016 := qt422016.AcquireByteBuffer()
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 	p.WriteScript(qb422016)
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 	qs422016 := string(qb422016.B)
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 	qt422016.ReleaseByteBuffer(qb422016)
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 	return qs422016
-//line keluhan.qtpl:401
+//line keluhan.qtpl:412
 }

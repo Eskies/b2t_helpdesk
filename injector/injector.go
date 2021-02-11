@@ -77,7 +77,7 @@ func LoadDependency(lokasikonfigurasi string, expath string) *Injector {
 
 	di.BotT, err = tgbotapi.NewBotAPI(di.Config.Get("telegram").Get("botkey").String())
 	if err != nil {
-		log.Panicf("Database failed: %s\n", err.Error())
+		log.Panicf("Telegram BOT Failed: %s\n", err.Error())
 	}
 	log.Println("Bot Authorized")
 

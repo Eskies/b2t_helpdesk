@@ -110,6 +110,13 @@ func StreamPageTemplate(qw422016 *qt422016.Writer, p Page) {
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Daftar Keluhan</span></a>
             </li>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item">
+                <a class="nav-link" href="/jeniskeluhan">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Jenis Keluhan</span></a>
+            </li>
             
             <!-- Nav Item - Charts -->
             <li class="nav-item">
@@ -169,14 +176,14 @@ func StreamPageTemplate(qw422016 *qt422016.Writer, p Page) {
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800">`)
-//line basepage.qtpl:129
+//line basepage.qtpl:136
 	p.StreamTitle(qw422016)
-//line basepage.qtpl:129
+//line basepage.qtpl:136
 	qw422016.N().S(`</h1>
                     `)
-//line basepage.qtpl:130
+//line basepage.qtpl:137
 	p.StreamBody(qw422016)
-//line basepage.qtpl:130
+//line basepage.qtpl:137
 	qw422016.N().S(`
 
                 </div>
@@ -208,9 +215,9 @@ func StreamPageTemplate(qw422016 *qt422016.Writer, p Page) {
 
     
     `)
-//line basepage.qtpl:160
+//line basepage.qtpl:167
 	p.StreamModal(qw422016)
-//line basepage.qtpl:160
+//line basepage.qtpl:167
 	qw422016.N().S(`
 
     <!-- Bootstrap core JavaScript-->
@@ -230,174 +237,174 @@ func StreamPageTemplate(qw422016 *qt422016.Writer, p Page) {
 
 
     `)
-//line basepage.qtpl:178
+//line basepage.qtpl:185
 	p.StreamScript(qw422016)
-//line basepage.qtpl:178
+//line basepage.qtpl:185
 	qw422016.N().S(`
 
 </body>
 </html>
 `)
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 }
 
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 func WritePageTemplate(qq422016 qtio422016.Writer, p Page) {
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 	StreamPageTemplate(qw422016, p)
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 	qt422016.ReleaseWriter(qw422016)
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 }
 
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 func PageTemplate(p Page) string {
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 	qb422016 := qt422016.AcquireByteBuffer()
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 	WritePageTemplate(qb422016, p)
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 	qs422016 := string(qb422016.B)
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 	qt422016.ReleaseByteBuffer(qb422016)
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 	return qs422016
-//line basepage.qtpl:182
+//line basepage.qtpl:189
 }
 
-//line basepage.qtpl:184
+//line basepage.qtpl:191
 type BasePage struct{}
 
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 func (p *BasePage) StreamTitle(qw422016 *qt422016.Writer) {
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 	qw422016.N().S(`This is a base title`)
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 }
 
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 func (p *BasePage) WriteTitle(qq422016 qtio422016.Writer) {
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 	p.StreamTitle(qw422016)
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 	qt422016.ReleaseWriter(qw422016)
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 }
 
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 func (p *BasePage) Title() string {
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 	qb422016 := qt422016.AcquireByteBuffer()
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 	p.WriteTitle(qb422016)
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 	qs422016 := string(qb422016.B)
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 	qt422016.ReleaseByteBuffer(qb422016)
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 	return qs422016
-//line basepage.qtpl:185
+//line basepage.qtpl:192
 }
 
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 func (p *BasePage) StreamBody(qw422016 *qt422016.Writer) {
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 	qw422016.N().S(`This is a base body`)
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 }
 
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 func (p *BasePage) WriteBody(qq422016 qtio422016.Writer) {
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 	p.StreamBody(qw422016)
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 	qt422016.ReleaseWriter(qw422016)
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 }
 
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 func (p *BasePage) Body() string {
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 	qb422016 := qt422016.AcquireByteBuffer()
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 	p.WriteBody(qb422016)
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 	qs422016 := string(qb422016.B)
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 	qt422016.ReleaseByteBuffer(qb422016)
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 	return qs422016
-//line basepage.qtpl:186
+//line basepage.qtpl:193
 }
 
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 func (p *BasePage) StreamModal(qw422016 *qt422016.Writer) {
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 	qw422016.N().S(`Modal`)
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 }
 
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 func (p *BasePage) WriteModal(qq422016 qtio422016.Writer) {
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 	p.StreamModal(qw422016)
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 	qt422016.ReleaseWriter(qw422016)
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 }
 
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 func (p *BasePage) Modal() string {
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 	qb422016 := qt422016.AcquireByteBuffer()
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 	p.WriteModal(qb422016)
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 	qs422016 := string(qb422016.B)
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 	qt422016.ReleaseByteBuffer(qb422016)
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 	return qs422016
-//line basepage.qtpl:187
+//line basepage.qtpl:194
 }
 
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 func (p *BasePage) StreamScript(qw422016 *qt422016.Writer) {
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 	qw422016.N().S(`Script`)
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 }
 
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 func (p *BasePage) WriteScript(qq422016 qtio422016.Writer) {
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 	p.StreamScript(qw422016)
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 	qt422016.ReleaseWriter(qw422016)
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 }
 
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 func (p *BasePage) Script() string {
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 	qb422016 := qt422016.AcquireByteBuffer()
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 	p.WriteScript(qb422016)
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 	qs422016 := string(qb422016.B)
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 	qt422016.ReleaseByteBuffer(qb422016)
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 	return qs422016
-//line basepage.qtpl:188
+//line basepage.qtpl:195
 }

@@ -32,6 +32,12 @@ type KeluhanPage struct {
 							<option value="-1">Semua</option>
 							{% code
 								var optionval []string
+								results, _ := p.Dinjector.DB.Query("SELECT jenis FROM jenisticket ORDER BY id ASC")
+								for results.Next() {
+									var jenis string
+									results.Scan(&jenis)
+									optionval = append(optionval, jenis)
+								}
 								p.Dinjector.Config.Get("keyboardlist").Get("jenisticket").ForEach(func(key gjson.Result, value gjson.Result) bool {
 									optionval = append(optionval, value.Get("jenis").String())
 									return true
@@ -349,6 +355,7 @@ type KeluhanPage struct {
 				return false;
 			}
 
+			$("#btnkirimchat").hide();
 			datapost = {
 				"pesan" : $('#textpesan').val(),
 				"pegawai" : petugas,
@@ -358,6 +365,10 @@ type KeluhanPage struct {
 				reloadPesanChat();
 				$('#textpesan').val('').focus();
 			})
+
+			setTimeout(function() {
+				$("#btnkirimchat").show();
+			}, 2000);
 		});
 		$('#ticketModal').on('hidden.bs.modal', function (e) {
 			clearInterval(intervalchat);

@@ -25,6 +25,8 @@ func main() {
 	termChan := make(chan os.Signal)
 	signal.Notify(termChan, syscall.SIGINT, syscall.SIGTERM)
 
+	log.Println("Dependency Loaded!")
+
 	go telebot.TelebotStart(dinjector)
 	go browser.StartHTTPServer(dinjector)
 

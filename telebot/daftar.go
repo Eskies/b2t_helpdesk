@@ -13,8 +13,7 @@ import (
 
 func cmdDaftar(msg *tgbotapi.Message, di *injector.Injector, init bool) {
 	if init {
-		di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("pesan").Get("daftar").Get("pembuka").String()))
-		di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("pesan").Get("daftar").Get("noregistrasi").String()))
+		di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("pesan").Get("daftar").Get("pembuka").String()+"\n\n"+di.Config.Get("pesan").Get("daftar").Get("noregistrasi").String()))
 
 		var cmdaction injector.CmdAction
 		cmdaction.Cmd = "daftar"
@@ -29,6 +28,11 @@ func cmdDaftar(msg *tgbotapi.Message, di *injector.Injector, init bool) {
 		data := gjson.Parse(di.CmdData(msg.From.ID))
 		switch data.Get("stepnow").Int() {
 		case 0:
+			if di.IsNoRegUsed(msg.Text) {
+				di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, "Data yang ada masukan sudah digunakan oleh orang lain. Ketik /batal jika ingin membatalkan.\n"+di.Config.Get("pesan").Get("daftar").Get("noregistrasi").String()))
+				return
+			}
+
 			var cmdaction injector.CmdAction
 			cmdaction.Cmd = "daftar"
 			cmdaction.StepMax = 3
@@ -109,4 +113,10 @@ func cmdDaftar(msg *tgbotapi.Message, di *injector.Injector, init bool) {
 		}
 
 	}
+}
+
+func deleteRegistrasi(msg *tgbotapi.Message, di *injector.Injector) {
+	di.DelRedisCmd(msg.From.ID)
+	di.DB.Exec("UPDATE users SET deleted_at = ? WHERE idtelegram = ? AND deleted_at IS NULL", time.Now().Format("2006-01-02 15:04:05"), msg.From.ID)
+	di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, "Terima kasih, registrasi anda telah kami hapus"))
 }

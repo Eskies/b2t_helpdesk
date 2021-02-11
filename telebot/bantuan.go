@@ -4,6 +4,7 @@ import (
 	"b2t_helpdesk/injector"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -24,6 +25,25 @@ func cmdBantuan(msg *tgbotapi.Message, di *injector.Injector, step int) {
 		var buttonfin [][]tgbotapi.KeyboardButton
 		var button []tgbotapi.KeyboardButton
 		col := 0
+		results, _ := di.DB.Query("SELECT id, jenis FROM jenisticket ORDER BY id ASC")
+		for results.Next() {
+			var id int
+			var jenis string
+
+			results.Scan(&id, &jenis)
+			var keybuff tgbotapi.KeyboardButton
+			keybuff.Text = strconv.Itoa(id)
+			rplmsg += fmt.Sprintf("\n[%s] %s", strconv.Itoa(id), jenis)
+			button = append(button, keybuff)
+			col++
+			if col == 5 {
+				col = 0
+				buttonfin = append(buttonfin, button)
+				button = nil
+			}
+
+		}
+
 		di.Config.Get("keyboardlist").Get("jenisticket").ForEach(func(key gjson.Result, value gjson.Result) bool {
 			var keybuff tgbotapi.KeyboardButton
 			keybuff.Text = key.String()
@@ -62,14 +82,30 @@ func cmdBantuan(msg *tgbotapi.Message, di *injector.Injector, step int) {
 		data := gjson.Parse(di.CmdData(msg.From.ID))
 		switch gjson.Parse(di.CmdData(msg.From.ID)).Get("stepnow").Int() {
 		case 0:
-			if !di.Config.Get("keyboardlist").Get("jenisticket").Get(msg.Text).Get("autoinput").Bool() {
-				di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("keyboardlist").Get("jenisticket").Get(msg.Text).Get("hint").String()))
+			var autoinput bool
+			var hint string
+			var jenisticket string
 
+			if strings.Contains(msg.Text, "?") {
+				hint = di.Config.Get("keyboardlist").Get("jenisticket").Get(msg.Text).Get("hint").String()
+				jenisticket = di.Config.Get("keyboardlist").Get("jenisticket").Get(msg.Text).Get("jenis").String()
+				autoinput = di.Config.Get("keyboardlist").Get("jenisticket").Get(msg.Text).Get("autoinput").Bool()
+			} else {
+				var autoinput_buf int
+				di.DB.QueryRow("SELECT hint, jenis, autoinput FROM jenisticket WHERE id = ?", msg.Text).Scan(&hint, &jenisticket, &autoinput_buf)
+				if autoinput_buf == 0 {
+					autoinput = false
+				} else {
+					autoinput = true
+				}
+			}
+
+			if !autoinput {
 				var ru tgbotapi.ReplyKeyboardMarkup
 				ru.Keyboard = keyboardYaTidak()
 				ru.OneTimeKeyboard = true
 
-				msgo := tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("pesan").Get("bantuan").Get("konfirmasi").String())
+				msgo := tgbotapi.NewMessage(msg.Chat.ID, hint+"\n\n"+di.Config.Get("pesan").Get("bantuan").Get("konfirmasi").String())
 				msgo.ReplyMarkup = ru
 				di.Enqueue(msgo)
 
@@ -77,20 +113,20 @@ func cmdBantuan(msg *tgbotapi.Message, di *injector.Injector, step int) {
 				cmdaction.Cmd = "bantuan"
 				cmdaction.StepMax = 99
 				cmdaction.StepNow = 1
-				cmdaction.DataPerStep = append(cmdaction.DataPerStep, di.Config.Get("keyboardlist").Get("jenisticket").Get(msg.Text).Get("jenis").String())
+				cmdaction.DataPerStep = append(cmdaction.DataPerStep, jenisticket)
 
 				json, _ := json.Marshal(cmdaction)
 
 				di.DelRedisCmd(msg.From.ID)
 				di.SetRedisCmd(msg.From.ID, string(json), 5*time.Minute)
 			} else {
-				di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("pesan").Get("bantuan").Get("sebelummodeinput").String()))
+				di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, hint+"\n\n"+di.Config.Get("pesan").Get("bantuan").Get("sebelummodeinput").String()))
 
 				var cmdaction injector.CmdAction
 				cmdaction.Cmd = "bantuan"
 				cmdaction.StepMax = 99
 				cmdaction.StepNow = 2
-				cmdaction.DataPerStep = append(cmdaction.DataPerStep, di.Config.Get("keyboardlist").Get("jenisticket").Get(msg.Text).Get("jenis").String())
+				cmdaction.DataPerStep = append(cmdaction.DataPerStep, jenisticket)
 
 				json, _ := json.Marshal(cmdaction)
 
@@ -159,13 +195,13 @@ func cmdBantuan(msg *tgbotapi.Message, di *injector.Injector, step int) {
 					}
 				}
 			}
-
+			var pesanakhir string
 			if di.NewTicketBantuan(msg.From.ID, cmdaction.DataPerStep[0], cmdaction.DataPerStep[1], link) {
-				di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("pesan").Get("bantuan").Get("penutup").String()))
+				pesanakhir = di.Config.Get("pesan").Get("bantuan").Get("penutup").String()
 			} else {
-				di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("pesan").Get("bantuan").Get("gagal").String()))
+				pesanakhir = di.Config.Get("pesan").Get("bantuan").Get("gagal").String()
 			}
-			di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("pesan").Get("bantuan").Get("selesai").String()))
+			di.Enqueue(tgbotapi.NewMessage(msg.Chat.ID, pesanakhir+"\n\n"+di.Config.Get("pesan").Get("bantuan").Get("selesai").String()))
 			di.DelRedisCmd(msg.From.ID)
 		}
 

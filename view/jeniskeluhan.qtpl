@@ -1,0 +1,132 @@
+{% import (
+	"github.com/valyala/fasthttp" 
+	"b2t_helpdesk/injector"
+	"encoding/json"
+)%}
+
+{% code
+type JenisKeluhan struct {
+	CTX *fasthttp.RequestCtx
+	Dinjector *injector.Injector
+}
+%}
+
+
+{% func (p *JenisKeluhan) Title() %}
+	Daftar Jenis Keluhan
+{% endfunc %}
+
+
+{% func (p *JenisKeluhan) Body() %}
+	<div class="card shadow mb-4">
+		<div class="card-body">
+			<button class="btn btn-success" type="button" onclick="readytambah()" data-toggle="modal" data-target="#addModal">Tambah Jenis</button>
+			<div class="table-responsive">
+				<table class="table table-bordered" width="100%" cellspacing="0">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>ID</th>
+							<th>Jenis keluhan</th>
+							<th>Hint</th>
+							<th>Lanjut Ke Bantuan Langsung</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% code
+						results, _ := p.Dinjector.DB.Query("SELECT id, jenis, hint, autoinput FROM jenisticket ORDER BY id ASC")
+						type keluhan struct {
+							Id int `json:"id"`
+							Jenis string `json:"jenis"`
+							Hint string `json:"hint"`
+							Autoinput int `json:"autoinput"`
+						}
+						var daftarkeluhan []keluhan
+						for results.Next() {
+							var buffkeluhan keluhan
+							err := results.Scan(&buffkeluhan.Id, &buffkeluhan.Jenis, &buffkeluhan.Hint, &buffkeluhan.Autoinput)
+							if err == nil {
+								daftarkeluhan = append(daftarkeluhan, buffkeluhan)
+							}
+						}
+					%}
+					
+					{% for _, value := range daftarkeluhan %}
+						<tr>
+							{% code
+								dtjson, _ := json.Marshal(value)
+							%}
+							<td>
+								<button class="btn btn-warning" data-toggle="modal" data-target="#addModal" onclick="readyEdit('{%s string(dtjson) %}')" type="button"><i class="fa fa-edit"></i></button>
+								<a href="/jeniskeluhan/delete/{%d value.Id %}"><button class="btn btn-danger" type="button"><i class="fa fa-trash"></i></button></a>
+							</td>
+							<td>{%d value.Id %}</td>
+							<td>{%s value.Jenis %}</td>
+							<td>{%s value.Hint %}</td>
+							<td>{%d value.Autoinput %}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+{% endfunc %}
+
+{% func (p *JenisKeluhan) Modal() %}
+	<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah / Edit Jenis Keluhan</span></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+				<form action="/jeniskeluhan/update" method="post">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-12">
+								<div class="form group">
+									<input name="id" id="id" type="hidden">
+									<label>Jenis</label>
+									<input name="jenis" id="jenis" class="form-control" type="text">
+									<label>Hint</label>
+									<textarea name="hint" id="hint" class="form-control" rows="3"></textarea>
+									<label>Lanjut Ke Bantuan Langsung (0 Tidak, 1 Iya)</label>
+									<input name="autoinput" id="autoinput" class="form-control" type="number" max="1" min="0">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-success" type="submit">Simpan</button>
+					</div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endfunc %}
+
+{% func (p *JenisKeluhan) Script() %}
+<script>
+	function readytambah(){
+		$('#id').val("0");
+		$('#jenis').val("");
+		$('#hint').val("");
+		$('#autoinput').val("0");
+	}
+
+	function readyEdit(d){
+
+		data = JSON.parse(d);
+
+		$('#id').val(data.id);
+		$('#jenis').val(data.jenis);
+		$('#hint').val(data.hint);
+		$('#autoinput').val(data.autoinput);
+
+	}
+</script>
+{% endfunc %}
