@@ -34,22 +34,27 @@ func dataTableKeluhan(ctx *fasthttp.RequestCtx, di *injector.Injector) {
 		"users.noregistrasi",
 		"users.nama",
 		"users.kelompok",
+		"lup.starttimestamp",
 		"tickets.jenis",
 		"tickets.close",
 		"users.openchat",
 		"tickets.tim",
+		"tickets.id",
+		"lup.respontimestamp",
 	}
 
 	//tipe struct reply
 	type datastruct struct {
-		ID       int    `json:"id"`
-		NoReg    string `json:"no"`
-		Nama     string `json:"nama"`
-		Kelompok string `json:"kelompok"`
-		Jenis    string `json:"jenis"`
-		Close    string `json:"status"`
-		Openchat string `json:"openchat"`
-		Tim      string `json:"tim"`
+		ID           int    `json:"id"`
+		NoReg        string `json:"no"`
+		Nama         string `json:"nama"`
+		Kelompok     string `json:"kelompok"`
+		Jenis        string `json:"jenis"`
+		Close        string `json:"status"`
+		Openchat     string `json:"openchat"`
+		Tim          string `json:"tim"`
+		Waktukeluhan string `json:"waktukeluhan"`
+		Wakturespon  string `json:"wakturespon"`
 	}
 	type datatablestruct struct {
 		Draw            int          `json:"draw"`
@@ -63,9 +68,19 @@ func dataTableKeluhan(ctx *fasthttp.RequestCtx, di *injector.Injector) {
 	dtreply.Draw = draw
 	dtreply.Data = []datastruct{}
 
+	sqlchats := sqlbuilder.NewSelectBuilder()
+	sqlchats.From("chats")
+	sqlchats.Select(
+		"chats.ticket_id",
+		"DATE_FORMAT(MIN(chats.timestamp), '%d-%m-%Y %H:%i:%s') AS starttimestamp",
+		"IF(MAX(chats.timestamp) = MIN(chats.timestamp), '-', DATE_FORMAT(MAX(chats.timestamp), '%d-%m-%Y %H:%i:%s')) AS respontimestamp",
+	)
+	sqlchats.GroupBy("ticket_id")
+
 	sql := sqlbuilder.NewSelectBuilder()
 	sql.From("tickets")
 	sql.Join("users", "users.id = tickets.user_id")
+	sql.JoinWithOption(sqlbuilder.LeftJoin, sql.BuilderAs(sqlchats, "lup"), "lup.ticket_id = tickets.id")
 
 	//count all
 	sqlC := sql
@@ -137,6 +152,8 @@ func dataTableKeluhan(ctx *fasthttp.RequestCtx, di *injector.Injector) {
 		"IF("+sql.E("tickets.close", 0)+", 'TERBUKA', 'TERTUTUP') as close",
 		"IF("+sql.E("users.openchat", 0)+", 'CLOSE', 'OPEN') as openchat",
 		"COALESCE(tickets.tim, '-')",
+		"COALESCE(lup.starttimestamp, '-')",
+		"COALESCE(lup.respontimestamp, '-')",
 	)
 
 	sql.OrderBy(orderColomns[ordercol] + " " + orderdir)
@@ -167,6 +184,8 @@ func dataTableKeluhan(ctx *fasthttp.RequestCtx, di *injector.Injector) {
 			&buffData.Close,
 			&buffData.Openchat,
 			&buffData.Tim,
+			&buffData.Waktukeluhan,
+			&buffData.Wakturespon,
 		)
 
 		if err != nil {

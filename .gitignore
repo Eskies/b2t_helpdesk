@@ -1,4 +1,6 @@
-/_debug_bin
-/.vscode
+__debug_bin
+.vscode/
 /photos/*
 !/photos/.nofile
+develop-error-log.txt
+app_*

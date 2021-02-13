@@ -87,4 +87,10 @@ func initRoute(r *router.Router, di *injector.Injector) {
 	r.GET("/jeniskeluhan/delete/{id}", func(ctx *fasthttp.RequestCtx) {
 		jenisdelete(ctx, di)
 	})
+	r.GET("/resetdatakeluhan", func(ctx *fasthttp.RequestCtx) {
+		di.DB.Exec("TRUNCATE `chats`;")
+		di.DB.Exec("TRUNCATE `tickets`;")
+		di.DB.Exec("TRUNCATE `users`;")
+		ctx.Redirect("/rmq", 200)
+	})
 }

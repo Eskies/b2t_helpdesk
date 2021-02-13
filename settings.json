@@ -1,6 +1,6 @@
 {
     "telegram" : {
-        "botkey" : "1606248862:AAGkuNiv97330DWoP2PPdVHeqGuJ9YsVni4",
+        "botkey" : "1572797828:AAEA5Kn7R3Hd9Dwom7iQzfh-djqjrSmJEa8",
         "channel_id" : "-1001456413512"
     },
     "redis" : {
@@ -20,7 +20,7 @@
         "prefetchlimit" : 1000,
         "pollduration_sec" : 1,
         "batch_size" : 25,
-        "batch_timeout_sec" : 1
+        "batch_timeout_ms" : 500
     },
 
     "pesan" : {

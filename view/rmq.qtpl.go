@@ -83,103 +83,109 @@ func (p *RmqPage) StreamBody(qw422016 *qt422016.Writer) {
 	qw422016.N().S(`</pre>
 		</div>
 	</div>
+	<div class="card shadow mb-4">
+		<div class="card-body">
+			<p class="text-muted">Hati-hati, tombol ini akan menghapus data peserta, keluhan, dan chats (Kecuali daftar jenis keluhan)</p>
+			<a href="/resetdatakeluhan" class="btn btn-danger" onclick="return confirm('Apakah anda yakin mereset data? (tidak bisa dikembalikan)')">RESET DATA</a>
+		</div>
+	</div>
 
 `)
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 }
 
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 func (p *RmqPage) WriteBody(qq422016 qtio422016.Writer) {
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 	p.StreamBody(qw422016)
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 	qt422016.ReleaseWriter(qw422016)
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 }
 
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 func (p *RmqPage) Body() string {
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 	qb422016 := qt422016.AcquireByteBuffer()
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 	p.WriteBody(qb422016)
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 	qs422016 := string(qb422016.B)
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 	qt422016.ReleaseByteBuffer(qb422016)
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 	return qs422016
-//line rmq.qtpl:29
+//line rmq.qtpl:35
 }
 
-//line rmq.qtpl:31
+//line rmq.qtpl:37
 func (p *RmqPage) StreamModal(qw422016 *qt422016.Writer) {
-//line rmq.qtpl:31
+//line rmq.qtpl:37
 	qw422016.N().S(`
 	
 `)
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 }
 
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 func (p *RmqPage) WriteModal(qq422016 qtio422016.Writer) {
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 	p.StreamModal(qw422016)
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 	qt422016.ReleaseWriter(qw422016)
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 }
 
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 func (p *RmqPage) Modal() string {
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 	qb422016 := qt422016.AcquireByteBuffer()
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 	p.WriteModal(qb422016)
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 	qs422016 := string(qb422016.B)
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 	qt422016.ReleaseByteBuffer(qb422016)
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 	return qs422016
-//line rmq.qtpl:33
+//line rmq.qtpl:39
 }
 
-//line rmq.qtpl:35
+//line rmq.qtpl:41
 func (p *RmqPage) StreamScript(qw422016 *qt422016.Writer) {
-//line rmq.qtpl:35
+//line rmq.qtpl:41
 	qw422016.N().S(`
 
 `)
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 }
 
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 func (p *RmqPage) WriteScript(qq422016 qtio422016.Writer) {
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 	p.StreamScript(qw422016)
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 	qt422016.ReleaseWriter(qw422016)
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 }
 
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 func (p *RmqPage) Script() string {
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 	qb422016 := qt422016.AcquireByteBuffer()
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 	p.WriteScript(qb422016)
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 	qs422016 := string(qb422016.B)
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 	qt422016.ReleaseByteBuffer(qb422016)
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 	return qs422016
-//line rmq.qtpl:37
+//line rmq.qtpl:43
 }

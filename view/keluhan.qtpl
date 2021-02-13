@@ -112,9 +112,11 @@ type KeluhanPage struct {
 							<th>Nama</th>
 							<th>Kelompok</th>
 							<th>Jenis</th>
+							<th>Waktu Keluhan</th>
 							<th>Status</th>
 							<th>Openchat</th>
 							<th>Tim</th>
+							<th>Waktu Respon</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -216,9 +218,11 @@ type KeluhanPage struct {
 				{ "data": "nama" },
 				{ "data": "kelompok" },
 				{ "data": "jenis" },
+				{ "data": "waktukeluhan" },
 				{ "data": "status" },
 				{ "data": "openchat" },
 				{ "data": "tim" },
+				{ "data": "wakturespon" },
 			],
 			"order": [[0, 'desc']],
 			initComplete: function(){

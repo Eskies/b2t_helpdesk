@@ -201,9 +201,11 @@ func (p *KeluhanPage) StreamBody(qw422016 *qt422016.Writer) {
 							<th>Nama</th>
 							<th>Kelompok</th>
 							<th>Jenis</th>
+							<th>Waktu Keluhan</th>
 							<th>Status</th>
 							<th>Openchat</th>
 							<th>Tim</th>
+							<th>Waktu Respon</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -215,38 +217,38 @@ func (p *KeluhanPage) StreamBody(qw422016 *qt422016.Writer) {
 	</div>
 
 `)
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 }
 
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 func (p *KeluhanPage) WriteBody(qq422016 qtio422016.Writer) {
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 	p.StreamBody(qw422016)
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 	qt422016.ReleaseWriter(qw422016)
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 }
 
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 func (p *KeluhanPage) Body() string {
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 	qb422016 := qt422016.AcquireByteBuffer()
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 	p.WriteBody(qb422016)
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 	qs422016 := string(qb422016.B)
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 	qt422016.ReleaseByteBuffer(qb422016)
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 	return qs422016
-//line keluhan.qtpl:128
+//line keluhan.qtpl:130
 }
 
-//line keluhan.qtpl:130
+//line keluhan.qtpl:132
 func (p *KeluhanPage) StreamModal(qw422016 *qt422016.Writer) {
-//line keluhan.qtpl:130
+//line keluhan.qtpl:132
 	qw422016.N().S(`
 	<div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -301,38 +303,38 @@ func (p *KeluhanPage) StreamModal(qw422016 *qt422016.Writer) {
         </div>
     </div>
 `)
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 }
 
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 func (p *KeluhanPage) WriteModal(qq422016 qtio422016.Writer) {
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 	p.StreamModal(qw422016)
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 	qt422016.ReleaseWriter(qw422016)
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 }
 
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 func (p *KeluhanPage) Modal() string {
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 	qb422016 := qt422016.AcquireByteBuffer()
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 	p.WriteModal(qb422016)
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 	qs422016 := string(qb422016.B)
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 	qt422016.ReleaseByteBuffer(qb422016)
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 	return qs422016
-//line keluhan.qtpl:183
+//line keluhan.qtpl:185
 }
 
-//line keluhan.qtpl:185
+//line keluhan.qtpl:187
 func (p *KeluhanPage) StreamScript(qw422016 *qt422016.Writer) {
-//line keluhan.qtpl:185
+//line keluhan.qtpl:187
 	qw422016.N().S(`
 <script>
 	var dataKeluhan_table;
@@ -367,9 +369,11 @@ func (p *KeluhanPage) StreamScript(qw422016 *qt422016.Writer) {
 				{ "data": "nama" },
 				{ "data": "kelompok" },
 				{ "data": "jenis" },
+				{ "data": "waktukeluhan" },
 				{ "data": "status" },
 				{ "data": "openchat" },
 				{ "data": "tim" },
+				{ "data": "wakturespon" },
 			],
 			"order": [[0, 'desc']],
 			initComplete: function(){
@@ -561,31 +565,31 @@ func (p *KeluhanPage) StreamScript(qw422016 *qt422016.Writer) {
 	});
 </script>
 `)
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 }
 
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 func (p *KeluhanPage) WriteScript(qq422016 qtio422016.Writer) {
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 	p.StreamScript(qw422016)
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 	qt422016.ReleaseWriter(qw422016)
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 }
 
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 func (p *KeluhanPage) Script() string {
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 	qb422016 := qt422016.AcquireByteBuffer()
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 	p.WriteScript(qb422016)
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 	qs422016 := string(qb422016.B)
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 	qt422016.ReleaseByteBuffer(qb422016)
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 	return qs422016
-//line keluhan.qtpl:412
+//line keluhan.qtpl:416
 }

@@ -94,7 +94,7 @@ func LoadDependency(lokasikonfigurasi string, expath string) *Injector {
 		log.Panicf("RMQ failed: %s\n", err.Error())
 	}
 
-	if _, err := outQ.AddBatchConsumer("outbox-b2t", di.Config.Get("rmq").Get("batch_size").Int(), time.Duration(di.Config.Get("rmq").Get("batch_timeout_sec").Int())*time.Second, NewBatchConsumer(&di)); err != nil {
+	if _, err := outQ.AddBatchConsumer("outbox-b2t", di.Config.Get("rmq").Get("batch_size").Int(), time.Duration(di.Config.Get("rmq").Get("batch_timeout_ms").Int())*time.Millisecond, NewBatchConsumer(&di)); err != nil {
 		log.Panicf("RMQ failed: %s\n", err.Error())
 	}
 

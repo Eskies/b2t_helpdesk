@@ -31,6 +31,7 @@ func (consumer *BatchConsumer) Consume(batch rmq.Deliveries) {
 	if len(errors) == 0 {
 		return
 	}
+	time.Sleep(1 * time.Second)
 }
 
 func rmqCleaner(di *Injector) {
