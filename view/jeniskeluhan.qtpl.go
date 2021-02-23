@@ -7,67 +7,66 @@ package view
 //line jeniskeluhan.qtpl:1
 import (
 	"b2t_helpdesk/injector"
-	"encoding/json"
 	"github.com/valyala/fasthttp"
 )
 
-//line jeniskeluhan.qtpl:7
+//line jeniskeluhan.qtpl:6
 import (
 	qtio422016 "io"
 
 	qt422016 "github.com/valyala/quicktemplate"
 )
 
-//line jeniskeluhan.qtpl:7
+//line jeniskeluhan.qtpl:6
 var (
 	_ = qtio422016.Copy
 	_ = qt422016.AcquireByteBuffer
 )
 
-//line jeniskeluhan.qtpl:8
+//line jeniskeluhan.qtpl:7
 type JenisKeluhan struct {
 	CTX       *fasthttp.RequestCtx
 	Dinjector *injector.Injector
 }
 
-//line jeniskeluhan.qtpl:15
+//line jeniskeluhan.qtpl:14
 func (p *JenisKeluhan) StreamTitle(qw422016 *qt422016.Writer) {
-//line jeniskeluhan.qtpl:15
+//line jeniskeluhan.qtpl:14
 	qw422016.N().S(`
 	Daftar Jenis Keluhan
 `)
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 }
 
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 func (p *JenisKeluhan) WriteTitle(qq422016 qtio422016.Writer) {
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 	p.StreamTitle(qw422016)
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 	qt422016.ReleaseWriter(qw422016)
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 }
 
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 func (p *JenisKeluhan) Title() string {
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 	qb422016 := qt422016.AcquireByteBuffer()
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 	p.WriteTitle(qb422016)
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 	qs422016 := string(qb422016.B)
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 	qt422016.ReleaseByteBuffer(qb422016)
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 	return qs422016
-//line jeniskeluhan.qtpl:17
+//line jeniskeluhan.qtpl:16
 }
 
-//line jeniskeluhan.qtpl:20
+//line jeniskeluhan.qtpl:19
 func (p *JenisKeluhan) StreamBody(qw422016 *qt422016.Writer) {
-//line jeniskeluhan.qtpl:20
+//line jeniskeluhan.qtpl:19
 	qw422016.N().S(`
 	<div class="card shadow mb-4">
 		<div class="card-body">
@@ -85,7 +84,7 @@ func (p *JenisKeluhan) StreamBody(qw422016 *qt422016.Writer) {
 					</thead>
 					<tbody>
 					`)
-//line jeniskeluhan.qtpl:37
+//line jeniskeluhan.qtpl:36
 	results, _ := p.Dinjector.DB.Query("SELECT id, jenis, hint, autoinput FROM jenisticket ORDER BY id ASC")
 	type keluhan struct {
 		Id        int    `json:"id"`
@@ -102,58 +101,52 @@ func (p *JenisKeluhan) StreamBody(qw422016 *qt422016.Writer) {
 		}
 	}
 
-//line jeniskeluhan.qtpl:52
+//line jeniskeluhan.qtpl:51
 	qw422016.N().S(`
 					
 					`)
-//line jeniskeluhan.qtpl:54
+//line jeniskeluhan.qtpl:53
 	for _, value := range daftarkeluhan {
-//line jeniskeluhan.qtpl:54
+//line jeniskeluhan.qtpl:53
 		qw422016.N().S(`
 						<tr>
-							`)
-//line jeniskeluhan.qtpl:57
-		dtjson, _ := json.Marshal(value)
-
-//line jeniskeluhan.qtpl:58
-		qw422016.N().S(`
 							<td>
 								<button class="btn btn-warning" data-toggle="modal" data-target="#addModal" onclick="readyEdit('`)
-//line jeniskeluhan.qtpl:60
-		qw422016.E().S(string(dtjson))
-//line jeniskeluhan.qtpl:60
+//line jeniskeluhan.qtpl:56
+		qw422016.N().D(value.Id)
+//line jeniskeluhan.qtpl:56
 		qw422016.N().S(`')" type="button"><i class="fa fa-edit"></i></button>
 								<a href="/jeniskeluhan/delete/`)
-//line jeniskeluhan.qtpl:61
+//line jeniskeluhan.qtpl:57
 		qw422016.N().D(value.Id)
-//line jeniskeluhan.qtpl:61
+//line jeniskeluhan.qtpl:57
 		qw422016.N().S(`"><button class="btn btn-danger" type="button"><i class="fa fa-trash"></i></button></a>
 							</td>
 							<td>`)
-//line jeniskeluhan.qtpl:63
+//line jeniskeluhan.qtpl:59
 		qw422016.N().D(value.Id)
-//line jeniskeluhan.qtpl:63
+//line jeniskeluhan.qtpl:59
 		qw422016.N().S(`</td>
 							<td>`)
-//line jeniskeluhan.qtpl:64
+//line jeniskeluhan.qtpl:60
 		qw422016.E().S(value.Jenis)
-//line jeniskeluhan.qtpl:64
+//line jeniskeluhan.qtpl:60
 		qw422016.N().S(`</td>
 							<td>`)
-//line jeniskeluhan.qtpl:65
+//line jeniskeluhan.qtpl:61
 		qw422016.E().S(value.Hint)
-//line jeniskeluhan.qtpl:65
+//line jeniskeluhan.qtpl:61
 		qw422016.N().S(`</td>
 							<td>`)
-//line jeniskeluhan.qtpl:66
+//line jeniskeluhan.qtpl:62
 		qw422016.N().D(value.Autoinput)
-//line jeniskeluhan.qtpl:66
+//line jeniskeluhan.qtpl:62
 		qw422016.N().S(`</td>
 						</tr>
 					`)
-//line jeniskeluhan.qtpl:68
+//line jeniskeluhan.qtpl:64
 	}
-//line jeniskeluhan.qtpl:68
+//line jeniskeluhan.qtpl:64
 	qw422016.N().S(`
 					</tbody>
 				</table>
@@ -162,38 +155,38 @@ func (p *JenisKeluhan) StreamBody(qw422016 *qt422016.Writer) {
 	</div>
 
 `)
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 }
 
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 func (p *JenisKeluhan) WriteBody(qq422016 qtio422016.Writer) {
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 	p.StreamBody(qw422016)
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 	qt422016.ReleaseWriter(qw422016)
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 }
 
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 func (p *JenisKeluhan) Body() string {
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 	qb422016 := qt422016.AcquireByteBuffer()
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 	p.WriteBody(qb422016)
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 	qs422016 := string(qb422016.B)
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 	qt422016.ReleaseByteBuffer(qb422016)
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 	return qs422016
-//line jeniskeluhan.qtpl:75
+//line jeniskeluhan.qtpl:71
 }
 
-//line jeniskeluhan.qtpl:77
+//line jeniskeluhan.qtpl:73
 func (p *JenisKeluhan) StreamModal(qw422016 *qt422016.Writer) {
-//line jeniskeluhan.qtpl:77
+//line jeniskeluhan.qtpl:73
 	qw422016.N().S(`
 	<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -228,38 +221,38 @@ func (p *JenisKeluhan) StreamModal(qw422016 *qt422016.Writer) {
         </div>
     </div>
 `)
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 }
 
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 func (p *JenisKeluhan) WriteModal(qq422016 qtio422016.Writer) {
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 	p.StreamModal(qw422016)
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 	qt422016.ReleaseWriter(qw422016)
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 }
 
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 func (p *JenisKeluhan) Modal() string {
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 	qb422016 := qt422016.AcquireByteBuffer()
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 	p.WriteModal(qb422016)
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 	qs422016 := string(qb422016.B)
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 	qt422016.ReleaseByteBuffer(qb422016)
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 	return qs422016
-//line jeniskeluhan.qtpl:110
+//line jeniskeluhan.qtpl:106
 }
 
-//line jeniskeluhan.qtpl:112
+//line jeniskeluhan.qtpl:108
 func (p *JenisKeluhan) StreamScript(qw422016 *qt422016.Writer) {
-//line jeniskeluhan.qtpl:112
+//line jeniskeluhan.qtpl:108
 	qw422016.N().S(`
 <script>
 	function readytambah(){
@@ -269,43 +262,42 @@ func (p *JenisKeluhan) StreamScript(qw422016 *qt422016.Writer) {
 		$('#autoinput').val("0");
 	}
 
-	function readyEdit(d){
-
-		data = JSON.parse(d);
-
-		$('#id').val(data.id);
-		$('#jenis').val(data.jenis);
-		$('#hint').val(data.hint);
-		$('#autoinput').val(data.autoinput);
-
+	function readyEdit(id){
+		$.get("/api/infojeniskeluhan/"+id)
+		.done(function(data){
+			$('#id').val(data.id);
+			$('#jenis').val(data.jenis);
+			$('#hint').val(data.hint);
+			$('#autoinput').val(data.autoinput);
+		})
 	}
 </script>
 `)
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 }
 
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 func (p *JenisKeluhan) WriteScript(qq422016 qtio422016.Writer) {
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 	p.StreamScript(qw422016)
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 	qt422016.ReleaseWriter(qw422016)
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 }
 
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 func (p *JenisKeluhan) Script() string {
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 	qb422016 := qt422016.AcquireByteBuffer()
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 	p.WriteScript(qb422016)
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 	qs422016 := string(qb422016.B)
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 	qt422016.ReleaseByteBuffer(qb422016)
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 	return qs422016
-//line jeniskeluhan.qtpl:132
+//line jeniskeluhan.qtpl:127
 }

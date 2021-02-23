@@ -1,7 +1,6 @@
 {% import (
 	"github.com/valyala/fasthttp" 
 	"b2t_helpdesk/injector"
-	"encoding/json"
 )%}
 
 {% code
@@ -53,11 +52,8 @@ type JenisKeluhan struct {
 					
 					{% for _, value := range daftarkeluhan %}
 						<tr>
-							{% code
-								dtjson, _ := json.Marshal(value)
-							%}
 							<td>
-								<button class="btn btn-warning" data-toggle="modal" data-target="#addModal" onclick="readyEdit('{%s string(dtjson) %}')" type="button"><i class="fa fa-edit"></i></button>
+								<button class="btn btn-warning" data-toggle="modal" data-target="#addModal" onclick="readyEdit('{%d value.Id %}')" type="button"><i class="fa fa-edit"></i></button>
 								<a href="/jeniskeluhan/delete/{%d value.Id %}"><button class="btn btn-danger" type="button"><i class="fa fa-trash"></i></button></a>
 							</td>
 							<td>{%d value.Id %}</td>
@@ -118,15 +114,14 @@ type JenisKeluhan struct {
 		$('#autoinput').val("0");
 	}
 
-	function readyEdit(d){
-
-		data = JSON.parse(d);
-
-		$('#id').val(data.id);
-		$('#jenis').val(data.jenis);
-		$('#hint').val(data.hint);
-		$('#autoinput').val(data.autoinput);
-
+	function readyEdit(id){
+		$.get("/api/infojeniskeluhan/"+id)
+		.done(function(data){
+			$('#id').val(data.id);
+			$('#jenis').val(data.jenis);
+			$('#hint').val(data.hint);
+			$('#autoinput').val(data.autoinput);
+		})
 	}
 </script>
 {% endfunc %}

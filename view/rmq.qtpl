@@ -27,6 +27,12 @@ type RmqPage struct {
 	</div>
 	<div class="card shadow mb-4">
 		<div class="card-body">
+			<p class="text-muted">Reload konfigurasi JSON</p>
+			<a href="/reload" class="btn btn-warning">Reload Konfigurasi JSON</a>
+		</div>
+	</div>
+	<div class="card shadow mb-4">
+		<div class="card-body">
 			<p class="text-muted">Hati-hati, tombol ini akan menghapus data peserta, keluhan, dan chats (Kecuali daftar jenis keluhan)</p>
 			<a href="/resetdatakeluhan" class="btn btn-danger" onclick="return confirm('Apakah anda yakin mereset data? (tidak bisa dikembalikan)')">RESET DATA</a>
 		</div>

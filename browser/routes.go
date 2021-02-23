@@ -3,8 +3,11 @@ package browser
 import (
 	"b2t_helpdesk/injector"
 	"b2t_helpdesk/view"
+	"io/ioutil"
+	"log"
 
 	"github.com/fasthttp/router"
+	"github.com/tidwall/gjson"
 	"github.com/valyala/fasthttp"
 )
 
@@ -22,6 +25,17 @@ func initRoute(r *router.Router, di *injector.Injector) {
 		}
 		view.WritePageTemplate(ctx, p)
 		ctx.SetContentType("text/html; charset=utf-8")
+	})
+
+	r.GET("/reload", func(ctx *fasthttp.RequestCtx) {
+		plan, _ := ioutil.ReadFile(di.ExPath + "/settings.json")
+		if !gjson.ValidBytes(plan) {
+			log.Println("Configuration gagal dibaca")
+		}
+
+		di.Config = gjson.ParseBytes(plan)
+		log.Println("Configuration Loaded")
+		ctx.Redirect("/rmq", 200)
 	})
 
 	r.GET("/keluhan", func(ctx *fasthttp.RequestCtx) {
@@ -92,5 +106,20 @@ func initRoute(r *router.Router, di *injector.Injector) {
 		di.DB.Exec("TRUNCATE `tickets`;")
 		di.DB.Exec("TRUNCATE `users`;")
 		ctx.Redirect("/rmq", 200)
+	})
+	r.GET("/api/infojeniskeluhan/{id}", func(ctx *fasthttp.RequestCtx) {
+		type keluhan struct {
+			Id        int    `json:"id"`
+			Jenis     string `json:"jenis"`
+			Hint      string `json:"hint"`
+			Autoinput int    `json:"autoinput"`
+		}
+
+		var jeniskel keluhan
+		id := ctx.UserValue("id").(string)
+
+		_ = di.DB.QueryRow("SELECT id, jenis, hint, autoinput FROM jenisticket WHERE id = ?", id).Scan(&jeniskel.Id, &jeniskel.Jenis, &jeniskel.Hint, &jeniskel.Autoinput)
+
+		di.DoJSONWrite(ctx, 200, jeniskel)
 	})
 }

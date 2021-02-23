@@ -4,6 +4,7 @@ import (
 	"b2t_helpdesk/injector"
 	"log"
 	"strings"
+	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/tidwall/gjson"
@@ -35,6 +36,23 @@ func TelebotStart(di *injector.Injector) {
 }
 
 func prosesPesanMasuk(msg *tgbotapi.Message, di *injector.Injector) {
+	if di.Config.Get("telegram").Get("close").Bool() {
+		msg := tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("telegram").Get("pesanclose").String())
+		di.Enqueue(msg)
+		return
+	}
+
+	//cek jam operasional
+	jambuka, _ := time.Parse("2006-01-02 15:04:05 Z0700", time.Now().Format("2006-01-02 ")+di.Config.Get("telegram").Get("jamaktif").Get("mulai").String())
+	jamtutup, _ := time.Parse("2006-01-02 15:04:05 Z0700", time.Now().Format("2006-01-02 ")+di.Config.Get("telegram").Get("jamaktif").Get("tutup").String())
+	loc, _ := time.LoadLocation("Asia/Makassar")
+	harikey := time.Now().In(loc).Format("Mon")
+	if time.Now().Before(jambuka) || time.Now().After(jamtutup) || di.Config.Get("telegram").Get("jamaktif").Get("hariaktif").Get(harikey).Bool() == false {
+		msg := tgbotapi.NewMessage(msg.Chat.ID, di.Config.Get("telegram").Get("jamaktif").Get("pesantutup").String())
+		di.Enqueue(msg)
+		return
+	}
+
 	if di.IsOpenChat(msg.From.ID) {
 		OpenChat(msg, di)
 		return

@@ -196,7 +196,7 @@ func StreamPageTemplate(qw422016 *qt422016.Writer, p Page) {
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright 2021 &copy; B2T Helpdesk (Developed by: <a href="https://github.com/Eskies">eskies</a>)</span>
+                        <span>v0.10 Copyright 2021 &copy; B2T Helpdesk (Developed by: <a href="https://github.com/Eskies">eskies</a>)</span>
                     </div>
                 </div>
             </footer>

@@ -1,7 +1,23 @@
 {
     "telegram" : {
         "botkey" : "1572797828:AAEA5Kn7R3Hd9Dwom7iQzfh-djqjrSmJEa8",
-        "channel_id" : "-1001456413512"
+        "channel_id" : "-1001456413512",
+        "close" : false,
+        "pesanclose" : "Halo, terima kasih telah menghubungi kami. Mohon maaf saat ini layanan telegram sedang tidak aktif, silahkan hubungi kami melalui chat Microsoft Teams di : supportperwalian@stikom-bali.ac.id",
+        "jamaktif": {
+            "mulai": "09:00:00 +0800",
+            "tutup": "16:00:00 +0800",
+            "pesantutup": "Halo, terima kasih telah menghubungi kami. Mohon maaf saat ini bukan jam operasional kami, silahkan hubungi kami di waktu operasional Senin-Sabtu jam 09.00-16.00 WITA. Terima kasih.",
+            "hariaktif" : {
+                "Sun" : false,
+                "Mon" : true,
+                "Tue" : true,
+                "Wed" : true,
+                "Thu" : true,
+                "Fri" : true,
+                "Sat" : true
+            }
+        }
     },
     "redis" : {
         "host" : "127.0.0.1",
